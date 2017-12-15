@@ -14,7 +14,7 @@
 		1AFECE6A1FE3B9650083ED93 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1AFECE681FE3B9650083ED93 /* Main.storyboard */; };
 		1AFECE6C1FE3B9650083ED93 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AFECE6B1FE3B9650083ED93 /* Assets.xcassets */; };
 		1AFECE6F1FE3B9650083ED93 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1AFECE6D1FE3B9650083ED93 /* LaunchScreen.storyboard */; };
-		54325C20C889AAAEB084DF65 /* Pods_BeenHere.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EF201FD50A6F5A4F5785995 /* Pods_BeenHere.framework */; };
+		C3B68AAEDCCD0D9A746B212E /* Pods_BeenHere.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB33C412D17EA5BF65691ABD /* Pods_BeenHere.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,8 +28,9 @@
 		1AFECE6B1FE3B9650083ED93 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1AFECE6E1FE3B9650083ED93 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1AFECE701FE3B9650083ED93 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7EF201FD50A6F5A4F5785995 /* Pods_BeenHere.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeenHere.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EF201FD50A6F5A4F5785995 /* Pods_BeenHere.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_BeenHere.framework; path = "/Users/Haydushki/Documents/BeenHere/BeenHere/../../../Library/Developer/Xcode/DerivedData/BeenHere-doxnykzbywcaohfmugzsarlmoozi/Build/Products/Debug-iphoneos/Pods_BeenHere.framework"; sourceTree = "<absolute>"; };
 		8B3DEF2ACA414B88AEA11587 /* Pods-BeenHere.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeenHere.release.xcconfig"; path = "Pods/Target Support Files/Pods-BeenHere/Pods-BeenHere.release.xcconfig"; sourceTree = "<group>"; };
+		FB33C412D17EA5BF65691ABD /* Pods_BeenHere.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BeenHere.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,7 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				54325C20C889AAAEB084DF65 /* Pods_BeenHere.framework in Frameworks */,
+				C3B68AAEDCCD0D9A746B212E /* Pods_BeenHere.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				7EF201FD50A6F5A4F5785995 /* Pods_BeenHere.framework */,
+				FB33C412D17EA5BF65691ABD /* Pods_BeenHere.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

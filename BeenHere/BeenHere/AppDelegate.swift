@@ -8,6 +8,8 @@
 
 import UIKit
 import Firebase
+import GoogleSignIn
+
 
 @UIApplicationMain
 
@@ -20,6 +22,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
        
         FirebaseApp.configure()
+
+//        var configureError: NSError?
+//        GGLContext.sharedInstance().configureWithError(&configureError)
+//        assert(configureError == nil, "Error configuring Google services: \(configureError)")
+
+
+//        [[FBSDKApplicationDelegate sharedInstance] application:application
+//            didFinishLaunchingWithOptions:launchOptions];
         
         return true
     }

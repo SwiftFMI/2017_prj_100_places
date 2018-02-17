@@ -13,6 +13,7 @@ target 'BeenHere' do
 	pod 'Firebase/Core'
 	pod 'Firebase/Storage'
 	pod 'GoogleSignIn'
+	pod 'ReachabilitySwift'
   # Pods for BeenHere
 
 end

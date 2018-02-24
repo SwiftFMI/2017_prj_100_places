@@ -10,26 +10,63 @@ import UIKit
 import Firebase
 import StoreKit
 
-class PlacesViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,PlacesDatasource {
+import FirebaseAuthUI
+import FirebaseGoogleAuthUI
+import FirebaseFacebookAuthUI
+
+
+class PlacesViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,PlacesDatasource,FUIAuthDelegate {
     
-    func placesUpdated() {
+    func placesUpdated()
+    {
+        if (showOnlyVisited == true)
+        {
+            places = placesDataSource.visitedPlaces()
+        }
+        else
+        {
+            places = placesDataSource.places
+        }
+        UIView.animate(withDuration: 0.2) {
+            self.placesTableView.alpha = 1.0
+        }
+        
+        loadingIndicator.stopAnimating()
+        
         self.placesTableView.reloadData()
     }
     
-    var placesDataSource : Places = Places()
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
+    var placesDataSource : Places = Places.sharedInstance
+    var places = Array<Place>()
+
+    var showOnlyVisited : Bool = false
     
     @IBOutlet weak var placesTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        placesTableView.alpha = 0.0
+        loadingIndicator.startAnimating()
+        
+        
         print("viewDidLoad")
-        if (Auth.auth().currentUser == nil)
+//        if (Auth.auth().currentUser == nil)
+//        {
+//            Auth.auth().signInAnonymously() { (user, error) in
+//                // ...
+//            }
+//        }
+        if (showOnlyVisited == true)
         {
-            Auth.auth().signInAnonymously() { (user, error) in
-                // ...
-            }
+            places = placesDataSource.visitedPlaces()
         }
+        else
+        {
+            places = placesDataSource.places
+        }
+        
         self.title = "Places"
         placesDataSource.delegate = self
         self.placesDataSource.downloadDatabasePlacesData()
@@ -42,30 +79,50 @@ class PlacesViewController: UIViewController,UITableViewDelegate,UITableViewData
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        print("User \(Auth.auth().currentUser?.uid ?? "User UID nil")")
         print("User \(Auth.auth().currentUser?.displayName ?? "User displayName nil")")
+        
+        let providers: [FUIAuthProvider] = [
+            FUIGoogleAuth(),
+            FUIFacebookAuth(),
+            ]
+        
+        // Auth Here
+        let authUI = FUIAuth.defaultAuthUI()
+        // You need to adopt a FUIAuthDelegate protocol to receive callback
+        authUI?.providers = providers
+        authUI?.delegate = self as FUIAuthDelegate
+        
+        if ((Auth.auth().currentUser?.displayName) == nil)
+        {
+            let authUI = FUIAuth.defaultAuthUI()
+            let authViewController = authUI?.authViewController()
+//            self.present(authViewController!, animated: true, completion: nil)
+        }
     }
-    
     
     //MARK: - TableView Methods
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         tableView.deselectRow(at: indexPath, animated: false)
-        
-        
-        print("\(placesDataSource.places[indexPath.row].description)");
+        print("\(places.description)");
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return placesDataSource.places.count
+        return places.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "placeCell", for: indexPath) as! PlaceTableViewCell
+
+        let place : Place = places[indexPath.row]
+        let firstImage : String = place.imageNames[0]
+        cell.placeNameLabel.text = place.placeName
+
+        cell.ratingView.rating = place.rating
         
-        
-        cell.placeNameLabel.text = placesDataSource.places[indexPath.row].placeName
-        if let placeData = placesDataSource.places[indexPath.row].placeImageData
+        if let placeData = place.placeImages[firstImage]
         {
             cell.dowloadingImageIndicator.stopAnimating()
             cell.placeImageView.image = UIImage(data: placeData)
@@ -77,12 +134,25 @@ class PlacesViewController: UIViewController,UITableViewDelegate,UITableViewData
         if  let destination = segue.destination as? PlaceDetailViewController,
             let index = placesTableView.indexPathForSelectedRow?.row
         {
-            print("\(placesDataSource.places[index].description)");
-            destination.detailPlace = placesDataSource.places[index]
+            print("\(places[index].description)");
+            destination.detailPlace = places[index]
+            
+            for image in places[index].imageNames
+            {
+                if let data = Places.sharedInstance.imageExistsForName(name: image)
+                {
+                    if (destination.detailPlace.placeImages[image] == nil)
+                    {
+                        destination.detailPlace.placeImages[image] = data
+                    }
+                }
+                else
+                {
+                    Places.sharedInstance.getPlacesDataForPlace(place: places[index])
+                }
+            }
         }
     }
-    
-
 }
 //https://firebasestorage.googleapiself.com/v0/b/beenhere-ph.appspot.com/o/krushuna.jpg?alt=media&token=c7e39688-bfe9-4b9b-9b4c-32e8d8cf91cb
 

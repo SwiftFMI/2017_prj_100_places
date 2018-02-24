@@ -11,9 +11,15 @@ import UIKit
 class PlaceDetailCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var image: UIImageView!
+    @IBOutlet weak var loadingImageIndicatorView: UIActivityIndicatorView!
+    
     override func draw(_ rect: CGRect) {
         
         self.image.layer.cornerRadius = 15.0
         self.image.layer.masksToBounds = true
+    }
+    
+    override func awakeFromNib() {
+        self.loadingImageIndicatorView.startAnimating()
     }
 }

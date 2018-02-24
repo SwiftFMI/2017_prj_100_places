@@ -23,6 +23,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
        
         FirebaseApp.configure()
 
+        let customGreen : UIColor = UIColor(red: 39.0/255.0, green: 162.0/255.0, blue: 100.0/255.0, alpha: 1.0)
+        UINavigationBar.appearance().tintColor = UIColor.white
+
+        UINavigationBar.appearance().isTranslucent = false
+        UINavigationBar.appearance().barTintColor = customGreen
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]
+        UINavigationBar.appearance().barStyle = .blackOpaque
+
 //        var configureError: NSError?
 //        GGLContext.sharedInstance().configureWithError(&configureError)
 //        assert(configureError == nil, "Error configuring Google services: \(configureError)")

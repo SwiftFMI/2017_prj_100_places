@@ -26,6 +26,10 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchBkg" translatesAutoresizingMaskIntoConstraints="NO" id="lXL-oM-jfk">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cHH-j1-2ZX">
+                                <rect key="frame" x="-0.5" y="-0.5" width="375" height="667"/>
+                                <color key="backgroundColor" red="0.1529411765" green="0.63529411759999999" blue="0.39607843139999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BeenHere" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="72Q-wa-s6y">
                                 <rect key="frame" x="55" y="299" width="266" height="70"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="60"/>
@@ -52,11 +56,15 @@
                             <constraint firstItem="lXL-oM-jfk" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="MNx-Rk-X5J"/>
                             <constraint firstItem="Gyp-Sq-wHU" firstAttribute="top" secondItem="Wgd-9Z-Qwp" secondAttribute="bottom" constant="6" id="NTt-KE-C8U"/>
                             <constraint firstItem="72Q-wa-s6y" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="atW-jg-kaX"/>
+                            <constraint firstItem="cHH-j1-2ZX" firstAttribute="width" secondItem="lXL-oM-jfk" secondAttribute="width" id="eJU-F8-QyW"/>
                             <constraint firstItem="lXL-oM-jfk" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" id="fBm-KI-fJS"/>
+                            <constraint firstItem="cHH-j1-2ZX" firstAttribute="centerX" secondItem="lXL-oM-jfk" secondAttribute="centerX" id="gbx-z0-C1q"/>
                             <constraint firstItem="Gyp-Sq-wHU" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="jhe-gc-gSo"/>
                             <constraint firstItem="lXL-oM-jfk" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="jmh-gI-Zy7"/>
                             <constraint firstItem="72Q-wa-s6y" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="oao-Qr-rJy"/>
+                            <constraint firstItem="cHH-j1-2ZX" firstAttribute="centerY" secondItem="lXL-oM-jfk" secondAttribute="centerY" id="ptA-yF-gzs"/>
                             <constraint firstItem="Wgd-9Z-Qwp" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="soM-L7-s99"/>
+                            <constraint firstItem="cHH-j1-2ZX" firstAttribute="height" secondItem="lXL-oM-jfk" secondAttribute="height" id="zuR-9i-eYW"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>

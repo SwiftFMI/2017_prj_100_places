@@ -7,3 +7,11 @@
 //
 
 import Foundation
+import UIKit
+
+class DetailTableFirstSectionHeader: UITableViewHeaderFooterView {
+ 
+    @IBOutlet weak var ratingLabel: UILabel!
+    @IBOutlet weak var visitsCountLabel: UILabel!
+
+}

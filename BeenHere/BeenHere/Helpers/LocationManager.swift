@@ -7,14 +7,14 @@
 //
 
 import Foundation
-
+import UIKit
 import CoreLocation
 
 protocol LocationManagerDelegate: class {
     
-    func locationUpdated( location : CLLocation, address : String)
     func locationUpdated( location : CLLocation, address : [String: String])
     func locationFailed()
+    func startLocationUpdates()
 }
 
 class LocationManager: NSObject,CLLocationManagerDelegate {
@@ -56,6 +56,13 @@ class LocationManager: NSObject,CLLocationManagerDelegate {
     }
     
     
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if (status == CLAuthorizationStatus.authorizedWhenInUse)
+        {
+            delegate?.startLocationUpdates()
+        }
+    }
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error)
     {
         delegate?.locationFailed()
@@ -78,7 +85,7 @@ class LocationManager: NSObject,CLLocationManagerDelegate {
             
             if (err != nil)
             {
-                self.delegate?.locationUpdated(location: location, address: "")
+                self.delegate?.locationUpdated(location: location, address: ["":""])
             }
             else
             {
@@ -96,5 +103,16 @@ class LocationManager: NSObject,CLLocationManagerDelegate {
             }            
         }
     }
+    
+    
+    func distanceBetween(point1 : CGPoint, point2 : CGPoint) -> Double {
+        
+        let location1 = CLLocation(latitude: Double(point1.x), longitude: Double(point1.y))
+        let location2 = CLLocation(latitude: Double(point2.x), longitude: Double(point2.y))
+        let distance : CLLocationDistance = location1.distance(from: location2)
+        
+        return distance
+    }
+    
 }
 

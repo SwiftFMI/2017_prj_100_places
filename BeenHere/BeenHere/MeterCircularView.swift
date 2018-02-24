@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 class MeterCircularView: UIView {
 
@@ -16,99 +17,57 @@ class MeterCircularView: UIView {
     var circleLayer : CAShapeLayer = CAShapeLayer.init();
     var circlePath : UIBezierPath = UIBezierPath()
     
-    var firstDashLayer : CAShapeLayer = CAShapeLayer.init();
-    var firstDashPath : UIBezierPath = UIBezierPath()
+    var mapView : MKMapView = MKMapView()
     
-    var secondDashLayer : CAShapeLayer = CAShapeLayer.init();
-    var secondDashPath : UIBezierPath = UIBezierPath()
-    
-    var thirdDashLayer : CAShapeLayer = CAShapeLayer.init();
-    var thirdDashPath : UIBezierPath = UIBezierPath()
-    
-    var fourthDashLayer : CAShapeLayer = CAShapeLayer.init();
-    var fourthDashPath : UIBezierPath = UIBezierPath()
-    
-    var fifthDashLayer : CAShapeLayer = CAShapeLayer.init();
-    var fifthDashPath : UIBezierPath = UIBezierPath()
-
-    
+    override func awakeFromNib() {
+        mapView.showsUserLocation = true
+        mapView.isUserInteractionEnabled = false
+        addSubview(mapView)
+    }
+        
     override func draw(_ rect: CGRect) {
 
+        let customGreen : UIColor = UIColor(red: 39.0/255.0, green: 162.0/255.0, blue: 100.0/255.0, alpha: 1.0)
+        
         let frameWidth = frame.size.width
         let frameHeight = frame.size.height
         
-        let arrowWidth : CGFloat = 30.0
-        
-        let arrowTop = CGPoint(x: (frameWidth / 2.0 ) + 0.0, y:arrowWidth)
+        let arrowWidth : CGFloat = 8.0
         let arrowCenter = CGPoint(x: (frameWidth / 2.0 ), y:frameHeight / 2.0)
+        let arrowTop = CGPoint(x: (frameWidth / 2.0 ), y:arrowWidth * 1.5)
         
-        arrowPath.move(to: CGPoint(x: (frameWidth / 2.0 ) - arrowWidth/4.0, y: (frameHeight/2.0)))
-        arrowPath.addLine(to: arrowTop)
-        arrowPath.addLine(to: CGPoint(x: (frameWidth / 2.0 ) + arrowWidth/4.0, y: (frameHeight/2.0)))
-        arrowPath.addLine(to: CGPoint(x: (frameWidth / 2.0 ) - arrowWidth/4.0, y: (frameHeight/2.0)))
         arrowPath.move(to: arrowCenter)
+        arrowPath.addArc(withCenter: arrowCenter, radius: arrowWidth * 0.5, startAngle: 0, endAngle: CGFloat(Double.pi * 2.0), clockwise: true)
+        arrowPath.move(to: arrowCenter)
+        arrowPath.addLine(to: arrowTop)
         
+        arrowLayer.lineCap = kCALineCapRound
+
         self.layer.cornerRadius = frameHeight/2.0
         self.layer.masksToBounds = true
-        
-        arrowPath.addArc(withCenter: arrowCenter, radius: arrowWidth * 0.4, startAngle: 0, endAngle: CGFloat(Double.pi * 2.0), clockwise: true)
+        self.arrowLayer.contentsScale = 2.0
         
         arrowLayer.path = arrowPath.cgPath
-        arrowLayer.fillColor = UIColor.blue.cgColor
-        arrowLayer.strokeColor = UIColor.blue.cgColor
-        arrowLayer.lineWidth = 1.0;
+        arrowLayer.fillColor = customGreen.cgColor
+        arrowLayer.strokeColor = customGreen.cgColor
+        arrowLayer.lineWidth = arrowWidth/2.0
         arrowLayer.bounds = self.layer.bounds
-        arrowLayer.position = CGPoint (x:frameWidth/2.0, y: frameHeight/2.0);
-        arrowLayer.anchorPoint =  CGPoint(x: 0.5, y:0.5)
+        arrowLayer.position = arrowCenter;
+        arrowLayer.anchorPoint =  CGPoint(x: 0.5, y: 0.5)
     
         circlePath.addArc(withCenter: arrowCenter, radius: frameWidth * 0.5, startAngle: 0, endAngle: CGFloat(Double.pi * 2.0), clockwise: true)
     
         circleLayer.path = circlePath.cgPath
-        circleLayer.fillColor = UIColor.lightGray.cgColor        
-        circleLayer.strokeColor = UIColor.blue.cgColor
-        circleLayer.lineWidth = 10.0
-        
-        let step : CGFloat = 0.15
-        let start : CGFloat = 0.375
-        let circle : CGFloat = CGFloat(Double.pi * 2.0)
-        let radius : CGFloat = frameWidth * 0.5 - arrowWidth;
-        
-        self.setupDashLayer(dashLayer: firstDashLayer, path: firstDashPath,startAngle:start * circle,endAngle: CGFloat(start + step) * circle, center: arrowCenter, radius: radius,color: UIColor.red)
-        
-        self.setupDashLayer(dashLayer: secondDashLayer, path: secondDashPath,startAngle: (start + step) * circle,endAngle:((start + step*2) * circle), center: arrowCenter, radius: radius,color: UIColor.green)
-        
-        self.setupDashLayer(dashLayer: thirdDashLayer, path: thirdDashPath,startAngle:(start + step*2) * circle,endAngle: ((start + step*3) * circle), center: arrowCenter, radius: radius,color: UIColor.blue)
-        
-        self.setupDashLayer(dashLayer: fourthDashLayer, path: fourthDashPath,startAngle:((start + step*3) * circle),endAngle: ((start + step*4) * circle), center: arrowCenter, radius: radius,color: UIColor.cyan)
-        
-        self.setupDashLayer(dashLayer: fifthDashLayer, path: fifthDashPath,startAngle:((start + step*4) * circle),endAngle:((start + step*5) * circle), center: arrowCenter, radius: radius,color: UIColor.yellow)
-        
+        circleLayer.fillColor = UIColor.clear.cgColor
+        circleLayer.strokeColor = customGreen.cgColor
+        circleLayer.lineWidth = arrowWidth
         
         self.layer.addSublayer(circleLayer)
-//        self.layer.addSublayer(firstDashLayer)
-//        self.layer.addSublayer(secondDashLayer)
-//        self.layer.addSublayer(thirdDashLayer)
-//        self.layer.addSublayer(fourthDashLayer)
-//        self.layer.addSublayer(fifthDashLayer)
         self.layer.addSublayer(arrowLayer)
+        
+        self.mapView.frame = rect
     }
  
-    func valueChanged(value : Double) -> Void {
-        
-        var normalizedValue = value - 0.5
-        
-        let maxAngle = 0.35
-        if (normalizedValue < -maxAngle)
-        {
-            normalizedValue = -maxAngle
-        }
-        if (normalizedValue > maxAngle)
-        {
-            normalizedValue = maxAngle
-        }
-        arrowLayer.transform = CATransform3DMakeRotation(CGFloat(normalizedValue * Double.pi * 2.0), 0.0, 0.0, 1.0)
-    }
-    
     func rotate() -> Void {
         let kRotationAnimationKey = "rotationanimationkey"
         
@@ -119,27 +78,17 @@ class MeterCircularView: UIView {
                 rotationAnimation.toValue = Float.pi * 2.0
                 rotationAnimation.duration = 2.0
                 rotationAnimation.repeatCount = Float.infinity
-                rotationAnimation.timingFunction = CAMediaTimingFunction.init(name: kCAMediaTimingFunctionEaseOut)
+                rotationAnimation.timingFunction = CAMediaTimingFunction.init(name: kCAMediaTimingFunctionLinear)
                 arrowLayer.add(rotationAnimation, forKey: kRotationAnimationKey)
         }
     }
-        func stopRotating() -> Void {
-            
-            let kRotationAnimationKey = "rotationanimationkey"
-
-            if arrowLayer.animation(forKey: kRotationAnimationKey) != nil {
-                arrowLayer.removeAnimation(forKey: kRotationAnimationKey)
-            }
-        }
     
-    
-    func setupDashLayer(dashLayer : CAShapeLayer, path : UIBezierPath,startAngle : CGFloat,endAngle : CGFloat , center : CGPoint, radius : CGFloat, color : UIColor) -> Void {
+    func stopRotating() -> Void {
         
-        path.addArc(withCenter: center, radius: radius, startAngle: startAngle, endAngle:endAngle, clockwise: true)
-        dashLayer.path = path.cgPath
-        dashLayer.fillColor = UIColor.clear.cgColor
-        dashLayer.strokeColor = color.cgColor
-        dashLayer.lineWidth = 40.0
+        let kRotationAnimationKey = "rotationanimationkey"
+        
+        if arrowLayer.animation(forKey: kRotationAnimationKey) != nil {
+            arrowLayer.removeAnimation(forKey: kRotationAnimationKey)
+        }
     }
-
 }

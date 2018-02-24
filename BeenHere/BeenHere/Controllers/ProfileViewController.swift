@@ -78,12 +78,12 @@ class ProfileViewController: UIViewController, FUIAuthDelegate, UITableViewDeleg
         }
         self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width/2.0
         self.profileImageView.layer.masksToBounds  = true
-        self.profileImageView.layer.borderColor = UIColor.black.cgColor
+        self.profileImageView.layer.borderColor = UIColor.white.cgColor
         self.profileImageView.layer.borderWidth = 2.0
         
         dowloadProfileInfo()
         
-        self.title = "Places"
+        self.title = "Profile"
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -110,7 +110,7 @@ class ProfileViewController: UIViewController, FUIAuthDelegate, UITableViewDeleg
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if ((Auth.auth().currentUser) == nil)
+        if ((Auth.auth().currentUser?.displayName) == nil)
         {
             let authUI = FUIAuth.defaultAuthUI()
             let authViewController = authUI?.authViewController()
@@ -191,7 +191,6 @@ class ProfileViewController: UIViewController, FUIAuthDelegate, UITableViewDeleg
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "profileCell", for: indexPath)
-        
         cell.textLabel?.text = data[indexPath.row]
         
         return cell;
@@ -200,10 +199,23 @@ class ProfileViewController: UIViewController, FUIAuthDelegate, UITableViewDeleg
     func tableViewCellTapped(indexPathRow : Int) -> Void {
         
         var message : String
+        var present : Bool = true
         
         switch indexPathRow {
         case 0:
-            message = "\("My Places") to be implemented"
+            
+            if Places.sharedInstance.visitedPlaces().count > 0
+            {
+                let myPlaces =  self.storyboard?.instantiateViewController(withIdentifier: "placesVC") as! PlacesViewController
+                myPlaces.showOnlyVisited = true
+                self.navigationController?.pushViewController(myPlaces, animated: true)
+                message = ""
+                present = false
+            }
+            else
+            {
+                message = "You have not visited any places"
+            }
         case 1:
             message = "\("Wishlist") to be implemented"
         case 2:
@@ -213,24 +225,28 @@ class ProfileViewController: UIViewController, FUIAuthDelegate, UITableViewDeleg
         default:
             message = "What is this?"
         }
-        let alert = UIAlertController(title: data[indexPathRow], message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .`default`, handler: { _ in
-            NSLog("The \"OK\" alert occured.")
-        }))
-        if (indexPathRow == 3)
+        if (present == true)
         {
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Sign out", comment: "Default action"), style: .`default`, handler: { _ in
-                NSLog("Signing Out.")
-                let firebaseAuth = Auth.auth()
-                do {
-                    try firebaseAuth.signOut()
-                } catch let signOutError as NSError {
-                    print ("Error signing out: %@", signOutError)
-                }
-                
+            let alert = UIAlertController(title: data[indexPathRow], message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .`default`, handler: { _ in
+                NSLog("The \"OK\" alert occured.")
             }))
+            
+            if (indexPathRow == 3)
+            {
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Sign out", comment: "Default action"), style: .`default`, handler: { _ in
+                    NSLog("Signing Out.")
+                    let firebaseAuth = Auth.auth()
+                    do {
+                        try firebaseAuth.signOut()
+                    } catch let signOutError as NSError {
+                        print ("Error signing out: %@", signOutError)
+                    }
+                    
+                }))
+            }
+            self.present(alert, animated: true, completion: nil)
         }
-        self.present(alert, animated: true, completion: nil)
     }
 }
     func authUI(_ authUI: FUIAuth, didSignInWith user: User?, error: Error?) {
